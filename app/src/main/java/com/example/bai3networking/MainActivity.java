@@ -4,12 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.webkit.HttpAuthHandler;
-import android.widget.ListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,30 +18,28 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private final static String TAG = "https://jsonplaceholder.typicode.com/photos";
-    ArrayList<Conntact> contactList=new ArrayList<>();
-    RecyclerView view;
-    ContactAdapter contactAdapter;
+    private final static String URL = "https://jsonplaceholder.typicode.com/photos";
+    ArrayList<AlbumModel> albumList = new ArrayList<>();
+    RecyclerView recyclerView;
+    CustomAdapter customAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        view=findViewById(R.id.rcy);
-        LinearLayoutManager manager=new LinearLayoutManager(getApplicationContext(),RecyclerView.VERTICAL,false);
-        view.setLayoutManager(manager);
-        new JsonTask().execute(TAG);
+        recyclerView = findViewById(R.id.rcy);
+        LinearLayoutManager manager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
+        recyclerView.setLayoutManager(manager);
+        new JsonTask().execute(URL);
     }
 
 
     private class JsonTask extends AsyncTask<String, String, String> {
-        Conntact conntact;
+        AlbumModel albumModel;
 
         protected void onPreExecute() {
             super.onPreExecute();
@@ -101,29 +96,31 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            if (result !=null){
+            if (result != null) {
 
 
-                for (int i =0; i <10; i++){
-                    JSONObject jsonObject= null;
-                    try {
-                        JSONArray json = new JSONArray(result);
-                        JSONObject jsonResponse = json.getJSONObject(i);
+                //JSONObject jsonObject= null;
+                try {
+                    JSONArray jsonArray = new JSONArray(result);
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonResponse = jsonArray.getJSONObject(i);
                         String albumId = jsonResponse.getString("albumId");
                         String id = jsonResponse.getString("id");
-                        String title=jsonResponse.getString("title");
-                        String url=jsonResponse.getString("url");
-                        String thumbnailUrl=jsonResponse.getString("thumbnailUrl");
-                        conntact=new Conntact(albumId,id,title,url,thumbnailUrl);
-                        contactList.add(conntact);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        String title = jsonResponse.getString("title");
+                        String url = jsonResponse.getString("url");
+                        String thumbnailUrl = jsonResponse.getString("thumbnailUrl");
+                        albumModel = new AlbumModel(albumId, id, title, url, thumbnailUrl);
+                        albumList.add(albumModel);
                     }
 
-
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                contactAdapter=new ContactAdapter(MainActivity.this,contactList);
-                view.setAdapter(contactAdapter);
+
+
+                customAdapter = new CustomAdapter(MainActivity.this, albumList);
+                recyclerView.setAdapter(customAdapter);
             }
         }
 

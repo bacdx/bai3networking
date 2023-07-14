@@ -1,9 +1,9 @@
 package com.example.bai3networking;
 
-public class Conntact {
+public class AlbumModel {
     String albumId,id,title,url,thumbnailUrl;
 
-    public Conntact(String albumId, String id, String title, String url, String thumbnailUrl) {
+    public AlbumModel(String albumId, String id, String title, String url, String thumbnailUrl) {
         this.albumId = albumId;
         this.id = id;
         this.title = title;

@@ -1,6 +1,5 @@
 package com.example.bai3networking;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,26 +13,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
-public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
+public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
     Context context;
-    ArrayList<Conntact>list;
+    ArrayList<AlbumModel>list;
 
-    public ContactAdapter(Context context, ArrayList<Conntact> list) {
+    public CustomAdapter(Context context, ArrayList<AlbumModel> list) {
         this.context = context;
         this.list = list;
     }
 
     @NonNull
     @Override
-    public ContactAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CustomAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(context).inflate(R.layout.item,null);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ContactAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CustomAdapter.ViewHolder holder, int position) {
         holder.txtid.setText(list.get(position).id);
         holder.txttitle.setText(list.get(position).title);
         Picasso.get().load(list.get(position).thumbnailUrl).into(holder.imageView);
